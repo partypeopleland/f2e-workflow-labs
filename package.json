@@ -23,6 +23,7 @@
     "lodash": "^3.10.1"
   },
   "devDependencies": {
-    "bower": "^1.5.2"
+    "bower": "^1.5.2",
+    "gulp": "^3.9.0"
   }
 }
