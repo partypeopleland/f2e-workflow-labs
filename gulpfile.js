@@ -1,5 +1,9 @@
 var gulp = require('gulp');
 var del = require('del');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
+
 
 gulp.task('default',["mytask1"],function(){
 	console.log('My Default Task');
@@ -50,8 +54,36 @@ gulp.task('output4',["default"],function(){
 
 gulp.task('watch',function(){
 	gulp.watch('asserts/vendor/**/*.js',['output2']);
+	
 })
 
 gulp.task('watch2',function(){
 	gulp.watch('app/**/*.js',['default']);
+})
+
+//23 載入 gulp-concat 模組，並將多支 js 檔案合併成一支 讓前端頁面使用
+//24 將所有 app 下的 js 檔案都進行 uglify 醜化處理，合併後輸出到 assets 資料夾
+//25 將所有 app 下的 js 檔案都進行 uglify 醜化處理，合併後更名為 *.min.js 輸出到 assets 資料夾
+gulp.task('concat-app',function(){
+	
+	gulp.src('app/**/*.module.js')
+	.pipe(gulp.dest('src/app'))
+	.pipe(concat('app.modules.js'))
+	.pipe(gulp.dest('asserts'))
+	.pipe(uglify())
+	.pipe(rename(function(path){
+		path.extname=".min.js"
+	}))
+	.pipe(gulp.dest('asserts'))
+	
+	gulp.src(['app/**/*.js','!app/**/*.module.js'])
+	.pipe(gulp.dest('src/app'))
+	.pipe(concat('app.bundles.js'))
+	.pipe(gulp.dest('asserts'))
+	.pipe(uglify({mangle:false}))
+	.pipe(rename(function(path){
+		path.extname=".min.js"
+	}))
+	.pipe(gulp.dest('asserts'))
+	
 })
