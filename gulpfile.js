@@ -1,4 +1,6 @@
 var gulp = require('gulp');
+var del = require('del');
+
 gulp.task('default',["mytask1"],function(){
 	console.log('My Default Task');
 })
@@ -16,10 +18,18 @@ gulp.task('output1',["default"],function(){
 	.pipe(gulp.dest('output1'));	
 })
 
-gulp.task('output2',["default"],function(){
-	gulp.src('asserts/vendor/bootstrap/**/*.js',{base:'asserts'})
+gulp.task('output2',["clean2"],function(){
+	gulp.src('asserts/vendor/bootstrap/**/*.js',{base:'asserts/vendor'})
 	.pipe(gulp.dest('output2'));	
-})
+});
+
+gulp.task('clean2',function(cb){
+	del(['output2/bootstrap/**','!output2/bootstrap'])
+		.then(function (paths) {
+		console.log('Deleted files/folders:\n', paths.join('\n'));
+		cb();
+		})
+});
 
 gulp.task('output3',["default"],function(){
 	gulp.src([
@@ -36,3 +46,4 @@ gulp.task('output4',["default"],function(){
 		])
 		.pipe(gulp.dest('output4'));
 })
+
