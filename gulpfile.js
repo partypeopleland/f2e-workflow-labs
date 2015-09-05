@@ -48,3 +48,10 @@ gulp.task('output4',["default"],function(){
 		.pipe(gulp.dest('output4'));
 })
 
+gulp.task('watch',function(){
+	gulp.watch('asserts/vendor/**/*.js',['output2']);
+})
+
+gulp.task('watch2',function(){
+	gulp.watch('app/**/*.js',['default']);
+})
