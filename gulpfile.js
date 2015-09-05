@@ -28,3 +28,11 @@ gulp.task('output3',["default"],function(){
 		'asserts/vendor'})
 		.pipe(gulp.dest('output3'));
 })
+
+gulp.task('output4',["default"],function(){
+	gulp.src([
+		'asserts/vendor/angular/angular*.js',
+		'asserts/vendor/angular-animate/angular-*.js'
+		])
+		.pipe(gulp.dest('output4'));
+})
