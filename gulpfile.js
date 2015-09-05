@@ -24,6 +24,7 @@ gulp.task('output2',["clean2"],function(){
 });
 
 gulp.task('clean2',function(cb){
+	//沒檔案可以刪除，程式會掛在這邊
 	del(['output2/bootstrap/**','!output2/bootstrap'])
 		.then(function (paths) {
 		console.log('Deleted files/folders:\n', paths.join('\n'));
