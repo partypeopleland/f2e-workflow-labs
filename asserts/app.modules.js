@@ -56,13 +56,13 @@
 (function() {
     'use strict';
 
-    angular.module('blocks.exception', ['blocks.logger']);
+    angular.module('blocks.logger', []);
 })();
 
 (function() {
     'use strict';
 
-    angular.module('blocks.logger', []);
+    angular.module('blocks.exception', ['blocks.logger']);
 })();
 
 (function() {
