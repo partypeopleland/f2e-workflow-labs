@@ -7,7 +7,7 @@ module.exports = {
   },
   module:{
     loaders: [
-      { test: /\.css$/, loader: "style!css!autoprefixer"}
+      { test: /\.css$/, loader: "style!css"}
       //,
       //{ test: /\.jpg$/, loader: "url?limit=8000"},
       //{ test: /\.jpg$/, loader: "file?name=img/google-[hash:6].[ext]?[hash]"} 
