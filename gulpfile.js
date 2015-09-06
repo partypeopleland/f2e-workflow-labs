@@ -1,8 +1,21 @@
 var gulp = require('gulp');
 var del = require('del');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
+//透過gulp-load-plugins載入套件
+var $ = require('gulp-load-plugins')({
+	pattern: ['gulp-*', 'gulp.*'], // the glob(s) to search for 
+    config: 'package.json', // where to find the plugins, by default searched up from process.cwd() 
+    scope: ['dependencies', 'devDependencies', 'peerDependencies'], // which keys in the config to look within 
+    replaceString: /^gulp(-|\.)/, // what to remove from the name of the module when adding it to the context 
+    camelize: true, // if true, transforms hyphenated plugins names to camel case 
+    lazy: true, // whether the plugins should be lazy loaded on demand 
+    rename: {} // a mapping of plugins to rename 
+});
+//var concat = require('gulp-concat');
+//var uglify = require('gulp-uglify');
+//var rename = require('gulp-rename');
+
+//取得同目錄下的config
+var config = require('./config');
 
 
 gulp.task('default',["mytask1"],function(){
@@ -18,18 +31,18 @@ gulp.task('mytask2',function(){
 })
 
 gulp.task('output1',["default"],function(){
-	gulp.src('asserts/vendor/bootstrap/**/*.js')
-	.pipe(gulp.dest('output1'));	
+	gulp.src(config.srcBase+'/bootstrap/**/*.js')
+	.pipe(gulp.dest(config.destPath1));	
 })
 
 gulp.task('output2',["clean2"],function(){
-	gulp.src('asserts/vendor/bootstrap/**/*.js',{base:'asserts/vendor'})
-	.pipe(gulp.dest('output2'));	
+	gulp.src(config.srcBase+'/bootstrap/**/*.js',{base:config.srcBase})
+	.pipe(gulp.dest(config.destPath2));	
 });
 
 gulp.task('clean2',function(cb){
 	//沒檔案可以刪除，程式會掛在這邊
-	del(['output2/bootstrap/**','!output2/bootstrap'])
+	del([config.destpath2 + '/bootstrap/**','!'+config.destPath2+'/bootstrap'])
 		.then(function (paths) {
 		console.log('Deleted files/folders:\n', paths.join('\n'));
 		cb();
@@ -38,27 +51,26 @@ gulp.task('clean2',function(cb){
 
 gulp.task('output3',["default"],function(){
 	gulp.src([
-		'asserts/vendor/**/*.js',
-		'asserts/vendor/**/*.css'],{base:
-		'asserts/vendor'})
-		.pipe(gulp.dest('output3'));
+		config.srcBase+'/**/*.js',
+		config.srcBase+'/**/*.css'],{base:config.srcBase})
+		.pipe(gulp.dest(config.destPath3));
 })
 
 gulp.task('output4',["default"],function(){
 	gulp.src([
-		'asserts/vendor/angular/angular*.js',
-		'asserts/vendor/angular-animate/angular-*.js'
+		config.srcBase+'/angular/angular*.js',
+		config.srcBase+'/angular-animate/angular-*.js'
 		])
-		.pipe(gulp.dest('output4'));
+		.pipe(gulp.dest(config.destPath4));
 })
 
 gulp.task('watch',function(){
-	gulp.watch('asserts/vendor/**/*.js',['output2']);
+	gulp.watch(config.srcBase+'/**/*.js',['output2']);
 	
 })
 
 gulp.task('watch2',function(){
-	gulp.watch('app/**/*.js',['default']);
+	gulp.watch(config.appPath + '/**/*.js',['default']);
 })
 
 //23 載入 gulp-concat 模組，並將多支 js 檔案合併成一支 讓前端頁面使用
@@ -66,22 +78,22 @@ gulp.task('watch2',function(){
 //25 將所有 app 下的 js 檔案都進行 uglify 醜化處理，合併後更名為 *.min.js 輸出到 assets 資料夾
 gulp.task('concat-app',function(){
 	
-	gulp.src('app/**/*.module.js')
+	gulp.src(config.appPath + '/**/*.module.js')
 	.pipe(gulp.dest('src/app'))
-	.pipe(concat('app.modules.js'))
+	.pipe($.concat('app.modules.js'))
 	.pipe(gulp.dest('asserts'))
-	.pipe(uglify())
-	.pipe(rename(function(path){
+	.pipe($.uglify())
+	.pipe($.rename(function(path){
 		path.extname=".min.js"
 	}))
 	.pipe(gulp.dest('asserts'))
 	
-	gulp.src(['app/**/*.js','!app/**/*.module.js'])
+	gulp.src([config.appPath + '/**/*.js','!'+ config.appPath + '/**/*.module.js'])
 	.pipe(gulp.dest('src/app'))
-	.pipe(concat('app.bundles.js'))
+	.pipe($.concat('app.bundles.js'))
 	.pipe(gulp.dest('asserts'))
-	.pipe(uglify({mangle:false}))
-	.pipe(rename(function(path){
+	.pipe($.uglify({mangle:false}))
+	.pipe($.rename(function(path){
 		path.extname=".min.js"
 	}))
 	.pipe(gulp.dest('asserts'))
