@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/partypeopleland/f2e-workflow-labs#readme",
   "dependencies": {
+    "del": "^2.0.2",
     "jquery": "^1.11.0",
     "lodash": "^3.10.1"
   },
